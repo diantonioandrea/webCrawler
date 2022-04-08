@@ -3,4 +3,4 @@ webCrawler
 
 ### Summary
 
-webCrawler, a Python utility to create submaps of the internet
+webCrawler, a utility with CLI written in Python to create submaps of the internet starting from a single website
