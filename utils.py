@@ -78,12 +78,13 @@ def colorPrint(string: str, color: str):
 	return color + string + '\033[0m'
 
 def getCommand(commandString: str) -> tuple:
-	command = " ".join(input(commandString).split()).lower()
-	instructions = command.split(" ")
-
-	# OPTIONS, SINGLE DASH [[-key1, value1], ...] AND DOUBLE DASH [--key1, ...]
-
 	try: 
+
+		command = " ".join(input(commandString).split()).lower()
+		instructions = command.split(" ")
+
+		# OPTIONS, SINGLE DASH [[-key1, value1], ...] AND DOUBLE DASH [--key1, ...]
+
 		sdOpts = []
 		ddOpts = []
 
