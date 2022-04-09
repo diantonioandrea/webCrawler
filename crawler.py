@@ -1,10 +1,12 @@
-import utils
+import utils, random
 
 class crawler:
 	def __init__(self):
 		self.creationFlag = False
 		self.stopped = False
 		self.path = ""
+
+		self.code = "[" + chr(random.randint(65, 90)) + str(random.randint(10000, 99999)) + "]"
 
 		try:
 			self.crawlSize = abs(int(input("\n\tCrawler depth: ")))
@@ -18,14 +20,14 @@ class crawler:
 			print(utils.colorPrint("\n\tError: value error", utils.bcolors.RED))
 
 		except(KeyboardInterrupt):
-			print() # needed space
+			print() # Needed space
 			print(utils.colorPrint("\n\tCancelled", utils.bcolors.RED))
 
 		except(EOFError):
 			print(utils.colorPrint("\n\tCancelled", utils.bcolors.RED))
 
 	def __str__(self) -> str:
-		returnString =  "crawler: " + utils.getSite(self.startingPoint)
+		returnString =  "crawler " + self.code + ": " + utils.getSite(self.startingPoint)
 
 		if self.stopped:
 			returnString += ", stopped"
@@ -43,14 +45,18 @@ class crawler:
 			return {}
 
 		for _ in range(self.crawlSize):
-			crawlResult = utils.updateDict(crawlResult, utils.getSite(crawlUrl))
-			crawlUrl = utils.getNext(crawlUrl)
+			try:
+				crawlResult = utils.updateDict(crawlResult, utils.getSite(crawlUrl))
+				crawlUrl = utils.getNext(crawlUrl)
 
-			if crawlUrl == "stopCrawling":
-				self.stopped = True
-				break
+				if crawlUrl == "stopCrawling":
+					self.stopped = True
+					break
 
-			self.path += " -> " + crawlUrl
+				self.path += " -> " + crawlUrl
+			
+			except:
+				print(utils.colorPrint("\n\tCancelled: " + self.code, utils.bcolors.RED))
 		
 		if not self.stopped:
 			self.startingPoint = crawlUrl

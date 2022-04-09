@@ -169,10 +169,12 @@ def load(sdOptions=[], ddOptions=[], noneObject=None):
 		elif opts[0] == "-p": # path (until folder before)
 			path = opts[1]
 
-	for opts in ddOptions:
-		if opts == "--csv": # csv files
-			ext = ".csv"
-			rMode = "r"
+	# NO NEED FOR CSVs
+
+	# for opts in ddOptions:
+	# 	if opts == "--csv": # csv files
+	# 		ext = ".csv"
+	# 		rMode = "r"
 
 	filename += ext
 
