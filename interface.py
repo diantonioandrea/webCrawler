@@ -1,0 +1,107 @@
+import os, sys
+
+import crawler
+import utils
+
+
+print(utils.colorPrint("webCrawler", utils.bcolors.BLUE))
+print(utils.colorPrint("A utility with CLI written in Python to create submaps of the internet starting from a single website", utils.bcolors.BLUE))
+print(utils.colorPrint("Developed by Andrea Di Antonio", utils.bcolors.BLUE))
+print(utils.colorPrint("\nType \'help\' if needed", utils.bcolors.BLUE))
+
+try:
+	if not os.path.exists(str(os.getcwd()) + "/data"):
+		os.makedirs(str(os.getcwd()) + "/data")
+	
+except:
+	print(utils.colorPrint("\n\tError: couldn't create \'data\' folder\n\tExited\n", utils.bcolors.RED))
+	sys.exit(-1)
+
+try:
+	user = os.getlogin()
+
+	if user == "":
+		user = "user"
+
+except:
+	user = "user"
+
+crawlers = []
+
+# INTERFACE, USES A SIMILAR INTERFACE TO NBODY
+
+while True: # Interface
+	hostName = "webCrawler"
+
+	if len(crawlers) != 0:
+		hostName += "+" + str(len(crawlers))
+
+	instructions, sdOpts, ddOpts = utils.getCommand("\n" + user + "@" + hostName + ": ")
+
+	if len(instructions) > 0:
+
+		if instructions[0] == "skip": # Ctrl+C, EOF handler
+			continue
+
+		# EXIT PROGRAM
+
+		elif instructions[0] in ["exit", "quit"]:
+			sys.exit(0)
+
+		# HELP
+
+		elif instructions[0] == "help":
+			utils.help()
+			continue
+
+		# LIST CRAWLERS
+		
+		elif instructions[0] == "list":
+			if len(crawlers) == 0:
+				print(utils.colorPrint("\n\tError: not enough crawlers", utils.bcolors.RED))
+				continue
+
+			for c in crawlers:
+				print(utils.colorPrint("\n\t" + str(c), utils.bcolors.BLUE))
+			
+			continue
+
+		# CLEAR CRAWLERS
+
+		elif instructions[0] == "clear":
+			crawlers = []
+			print(utils.colorPrint("\n\tCleared crawlers list", utils.bcolors.GREEN))
+			continue
+
+		# CREATE A NEW CRAWLER
+	
+		elif instructions[0] == "new":
+			newCrawler = crawler.crawler()
+
+			if newCrawler.creationFlag:
+				crawlers.append(newCrawler)
+			continue
+
+		# DUMP BODIES AND ORBITS LIST TO A .pck FILE
+		
+		elif instructions[0] == "dump":
+			utils.dump(crawlers, sdOptions=sdOpts) # dumps to a .pck file
+			continue
+
+		# LOAD BODIES AND ORBITS LIST FROM A .pck OR BODIES LIST FROM A .csv FILE
+
+		elif instructions[0] == "load":
+			loadContent, loadExt = utils.load(sdOptions=sdOpts, ddOptions=ddOpts, noneObject=[])
+
+			# LOADS .pck
+
+			if loadExt == ".pck":
+				crawlers = loadContent
+				loadColor = utils.bcolors.GREEN
+			
+			if len(crawlers) > 0:
+				print(utils.colorPrint("\tLoaded " + str(len(crawlers)) + " bodies", loadColor))
+
+			continue
+	
+	print(utils.colorPrint("\n\tError: syntax error", utils.bcolors.RED))

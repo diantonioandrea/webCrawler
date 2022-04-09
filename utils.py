@@ -20,9 +20,11 @@ def getUrls(url: str) -> list:
 	bSoup = BeautifulSoup(source, "html.parser")
 	possibleUrls = [link.get("href") for link in bSoup.find_all("a")]
 
+	currentSite = getSite(url)
+
 	for newUrl in possibleUrls:
 		try: 
-			if "http" in newUrl  and url not in newUrl: # Avoids same site
+			if "http" in newUrl  and currentSite not in newUrl: # Avoids same site
 				newUrls.append(newUrl)
 		except:
 			pass
@@ -200,3 +202,23 @@ def help():
 
 	print(colorPrint("\n\texit, quit", bcolors.BLUE))
 	print("\t\tExits from program")
+
+	print(colorPrint("\n\tnew", bcolors.BLUE))
+	print("\t\tCreates a new crawler")
+
+	print(colorPrint("\n\tcrawl", bcolors.BLUE))
+	print("\t\tActivates crawlers")
+	print("\n\t\tAvailable options:")
+	print("\n\t\t--parallel: uses parallel computing, " + colorPrint("only on linux", bcolors.RED))
+
+	print(colorPrint("\n\tdump", bcolors.BLUE))
+	print("\t\tDumps current crawlers to a specified file")
+	print("\n\t\tAvailable options:")
+	print("\n\t\t-o FILENAME, output: specifies file without any extensions, " + colorPrint("required", bcolors.RED))
+	print("\t\t-p PATH, path: sets PATH as PATH/FILENAME")
+
+	print(colorPrint("\n\tload", bcolors.BLUE))
+	print("\t\tLoads crawlers from a specified file")
+	print("\n\t\tAvailable options:")
+	print("\n\t\t-i FILENAME, input: specifies file without any extensions, " + colorPrint("required", bcolors.RED))
+	print("\t\t-p PATH, path: sets PATH as PATH/FILENAME")

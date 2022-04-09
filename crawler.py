@@ -1,10 +1,28 @@
 import utils
 
 class crawler:
-	def __init__(self, cSize: int, sPoint: str):
-		self.crawlSize = cSize
-		self.startingPoint = sPoint
+	def __init__(self):
+		self.creationFlag = False
 		self.stopped = False
+		self.path = ""
+
+		try:
+			self.crawlSize = abs(int(input("\n\tCrawler depth: ")))
+			self.startingPoint = input("\n\tStarting point [URL]: ")
+
+			print(utils.colorPrint("\n\tNew crawler created", utils.bcolors.GREEN))
+			self.path += self.startingPoint
+			self.creationFlag = True
+
+		except(ValueError):
+			print(utils.colorPrint("\n\tError: value error", utils.bcolors.RED))
+
+		except(KeyboardInterrupt):
+			print() # needed space
+			print(utils.colorPrint("\n\tCancelled", utils.bcolors.RED))
+
+		except(EOFError):
+			print(utils.colorPrint("\n\tCancelled", utils.bcolors.RED))
 
 	def __str__(self) -> str:
 		returnString =  "crawler: " + utils.getSite(self.startingPoint)
@@ -13,7 +31,7 @@ class crawler:
 			returnString += ", stopped"
 
 		else:
-			returnString +=  + " -> " + str(self.crawlSize)
+			returnString += " -> " + str(self.crawlSize)
 
 		return returnString
 
@@ -31,6 +49,8 @@ class crawler:
 			if crawlUrl == "stopCrawling":
 				self.stopped = True
 				break
+
+			self.path += " -> " + crawlUrl
 		
 		if not self.stopped:
 			self.startingPoint = crawlUrl
