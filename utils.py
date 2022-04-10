@@ -24,7 +24,7 @@ def getUrls(url: str) -> list:
 
 	for newUrl in possibleUrls:
 		try: 
-			if "http" in newUrl  and currentSite not in newUrl: # Avoids same site
+			if "http" in newUrl and currentSite not in newUrl: # Avoids same site
 				newUrls.append(newUrl)
 		except:
 			pass

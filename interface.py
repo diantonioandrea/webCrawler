@@ -62,7 +62,7 @@ while True: # Interface
 				continue
 
 			for c in crawlers:
-				print(utils.colorPrint("\n\t" + str(c), utils.bcolors.BLUE))
+				print(utils.colorPrint(str(c), utils.bcolors.BLUE))
 			
 			continue
 
@@ -76,10 +76,26 @@ while True: # Interface
 		# CREATE A NEW CRAWLER
 	
 		elif instructions[0] == "new":
+			crawlersNumber = 1
+
+			for opts in sdOpts:
+				if opts[0] == "-n": # output file
+					try:
+						crawlersNumber = abs(int(opts[1]))
+					
+					except:
+						pass
+
 			newCrawler = crawler.crawler()
 
 			if newCrawler.creationFlag:
 				crawlers.append(newCrawler)
+
+				if crawlersNumber > 1:
+					for _ in range(crawlersNumber - 1):
+						crawlers.append(crawler.crawler(newCrawler.genCopy()))
+					
+					print(utils.colorPrint("\t" + str(crawlersNumber - 1) + " new other crawlers created", utils.bcolors.GREEN))
 			continue
 
 		# DUMP BODIES AND ORBITS LIST TO A .pck FILE
@@ -102,6 +118,16 @@ while True: # Interface
 			if len(crawlers) > 0:
 				print(utils.colorPrint("\tLoaded " + str(len(crawlers)) + " bodies", loadColor))
 
+			continue
+
+		# ACTIVATES CRAWLERS
+
+		elif instructions[0] == "crawl":
+			if len(crawlers) == 0:
+				print(utils.colorPrint("\n\tError: not enough crawlers", utils.bcolors.RED))
+				continue
+			
+			crawlers = crawler.multiCrawl(crawlers, sdOptions=sdOpts, ddOptions=ddOpts)
 			continue
 	
 	print(utils.colorPrint("\n\tError: syntax error", utils.bcolors.RED))
