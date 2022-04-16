@@ -5,6 +5,7 @@ class crawler:
 		self.creationFlag = False
 		self.stopped = False
 		self.path = ""
+		self.pathList = []
 
 		self.code = "[" + chr(random.randint(65, 90)) + str(random.randint(10000, 99999)) + "]"
 
@@ -51,9 +52,11 @@ class crawler:
 
 		if self.path == "":
 			self.path += utils.getSite(self.startingPoint)
+			self.pathList.append(utils.getSite(self.startingPoint))
 		
 		else:
 			self.path += " -> " + utils.getSite(self.startingPoint)
+			self.pathList.append(utils.getSite(self.startingPoint))
 
 		if not self.stopped:
 			for _ in range(self.crawlSize):
@@ -65,13 +68,14 @@ class crawler:
 					break
 
 				self.path += " -> " + crawlSite
+				self.pathList.append(crawlSite)
 			
 			self.startingPoint = crawlUrl
 		
-		return self
+		return self # needed to update crawlers on parallel crawling
 
 def singleCrawl(singleCrawler: crawler) -> None:
-	singleCrawler.crawl()
+	return singleCrawler.crawl()
 
 def multiCrawl(crawlers: list, sdOptions=[], ddOptions=[]):
 
@@ -84,7 +88,7 @@ def multiCrawl(crawlers: list, sdOptions=[], ddOptions=[]):
 
 	for opts in ddOptions:
 		if opts == "--parallel":
-			if "linux" not in sys.platform: # parallel computing only available on linux
+			if "linux" not in sys.platform: # parallel crawling only available on linux
 				print(utils.colorPrint("\n\tError: feature not available on this platform yet", utils.bcolors.RED))
 
 			else:
@@ -98,9 +102,9 @@ def multiCrawl(crawlers: list, sdOptions=[], ddOptions=[]):
 
 		if parallelFlag:
 
-			# PARALLEL COMPUTING
+			# PARALLEL CRAWLING
 
-			print(utils.colorPrint("\tUsing parallel computing", utils.bcolors.GREEN))
+			print(utils.colorPrint("\tUsing parallel crawling", utils.bcolors.GREEN))
 			workers = min([len(crawlers), multiprocessing.cpu_count()])
 
 			with multiprocessing.Pool(workers) as parallelPool: # automatic selection of processes count
