@@ -207,6 +207,8 @@ def help():
 
 	print(colorPrint("\n\tnew", bcolors.BLUE))
 	print("\t\tCreates a new crawler")
+	print("\n\t\tAvailable options:")
+	print("\n\t\t-n NUMBER, number of crawlers: specifies how many crawlers should be created")
 
 	print(colorPrint("\n\tcrawl", bcolors.BLUE))
 	print("\t\tActivates crawlers")

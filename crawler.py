@@ -40,7 +40,7 @@ class crawler:
 			returnString =  utils.colorPrint("\n\tcrawler " + self.code, utils.bcolors.GREEN)
 
 		if self.path != "":
-			returnString += ": " + self.path
+			returnString += ": " + self.path.replace("-> ", "", 1)
 
 		return returnString
 	
@@ -50,13 +50,13 @@ class crawler:
 	def crawl(self):
 		crawlUrl = self.startingPoint
 
-		if self.path == "":
-			self.path += utils.getSite(self.startingPoint)
-			self.pathList.append(utils.getSite(self.startingPoint))
+		# if self.path == "":
+		# 	self.path += utils.getSite(self.startingPoint)
+		# 	self.pathList.append(utils.getSite(self.startingPoint))
 		
-		else:
-			self.path += " -> " + utils.getSite(self.startingPoint)
-			self.pathList.append(utils.getSite(self.startingPoint))
+		# else:
+		# 	self.path += " -> " + utils.getSite(self.startingPoint)
+		# 	self.pathList.append(utils.getSite(self.startingPoint))
 
 		if not self.stopped:
 			for _ in range(self.crawlSize):
