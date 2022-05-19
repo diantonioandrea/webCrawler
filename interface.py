@@ -2,7 +2,7 @@ import os, sys
 
 import crawler
 import utils
-
+import submap
 
 print(utils.colorPrint("webCrawler", utils.bcolors.BLUE))
 print(utils.colorPrint("A utility with CLI written in Python to create submaps of the internet starting from a single website", utils.bcolors.BLUE))
@@ -27,6 +27,7 @@ except:
 	user = "user"
 
 crawlers = []
+smap = None
 
 # INTERFACE, USES A SIMILAR INTERFACE TO NBODY
 
@@ -116,7 +117,7 @@ while True: # Interface
 				loadColor = utils.bcolors.GREEN
 			
 			if len(crawlers) > 0:
-				print(utils.colorPrint("\tLoaded " + str(len(crawlers)) + " bodies", loadColor))
+				print(utils.colorPrint("\tLoaded " + str(len(crawlers)) + " crawlers", loadColor))
 
 			continue
 
@@ -130,4 +131,26 @@ while True: # Interface
 			crawlers = crawler.multiCrawl(crawlers, sdOptions=sdOpts, ddOptions=ddOpts)
 			continue
 	
+		# CREATES SUBMAP
+
+		elif instructions[0] == "map":
+			if len(crawlers) == 0:
+				print(utils.colorPrint("\n\tError: not enough crawlers", utils.bcolors.RED))
+				continue
+			
+			smap = submap.makeMap(crawlers)
+			print(utils.colorPrint("\n\tMap succesfully generated", utils.bcolors.GREEN))
+			continue
+
+		# SHOWS MAP
+
+		elif instructions[0] == "plot":
+			if smap == None:
+				print(utils.colorPrint("\n\tError: no map to show", utils.bcolors.RED))
+				continue
+			
+			print(utils.colorPrint("\n\tWeb submap starting from: " + str(smap), utils.bcolors.GREEN))
+			print("\n\t" + smap.__str__(1))
+			continue
+
 	print(utils.colorPrint("\n\tError: syntax error", utils.bcolors.RED))

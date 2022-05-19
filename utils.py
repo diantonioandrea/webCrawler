@@ -19,13 +19,14 @@ def getUrls(url: str) -> list:
 
 	bSoup = BeautifulSoup(source, "html.parser")
 	possibleUrls = [link.get("href") for link in bSoup.find_all("a")]
+	possibleUrls = [[getSite(pUrl), pUrl] for pUrl in possibleUrls]
 
 	currentSite = getSite(url)
 
 	for newUrl in possibleUrls:
 		try: 
-			if "http" in newUrl and currentSite not in newUrl: # Avoids same site
-				newUrls.append(newUrl)
+			if currentSite != newUrl[0] and newUrl[0] != None: # Avoids same site
+				newUrls.append(newUrl[1])
 		except:
 			pass
 
@@ -40,6 +41,9 @@ def getNext(url: str) -> str:
 	return random.choice(urls)
 
 def getSite(url: str) -> str:
+	if url == None:
+		return None
+
 	toBeRemoved = ["https", "http", "://"]
 
 	for string in toBeRemoved:
